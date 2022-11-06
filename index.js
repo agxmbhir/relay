@@ -71,11 +71,16 @@ app.post("/evm", async (req, res) => {
         listeners.mainnet(mainnetAddresses);
     };
 
-    // const polygonQuery = await cock.client.query('SELECT * FROM apps WHERE chain = $1', ['polygon']);
-    // if(polygonQuery.rows.length !== 0) {
-    //     const polygonAddresses = [...new Set(polygonQuery.rows.map(item => item.address))];
-    //     listeners.polygon(polygonAddresses);
-    // }
+    const polygonQuery = await cock.client.query('SELECT * FROM apps WHERE chain = $1', ['polygon']);
+    if(polygonQuery.rows.length !== 0) {
+        const polygonAddresses = [...new Set(polygonQuery.rows.map(item => item.address))];
+        listeners.polygon(polygonAddresses);
+    }
+    const optimismQuery = await cock.client.query('SELECT * FROM apps WHERE chain = $1', ['optimism']);
+    if(optimismQuery.rows.length !== 0) {
+        const optimismAddresses = [...new Set(optimismQuery.rows.map(item => item.address))];
+        listeners.optimism(optimismAddresses);
+    }
 })();
 
 app.listen(process.env.PORT || 8000, () => console.log("RUNNING"));
